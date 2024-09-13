@@ -22,14 +22,18 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import Button from "./Button";
+import moment from "moment";
+import getTableName from "../tableenum";
 
-export default function AddProduct({ id, open, onClose }) {
+export default function AddProduct({ id, open, onClose, type, inputValue }) {
     const [currentList, setCurrentList] = useState(
         JSON.parse(localStorage.getItem(`list_${id}`)) ?? []
     );
     const [openModal, setOpenModal] = useState(false);
     const [amount, setAmount] = useState(0);
     const [item, setItem] = useState({});
+    const [byTime, setByTime] = useState(0);
+    const [stopTime, setStopTime] = useState(false);
 
     const handleClose = () => {
         setCurrentList([]);
@@ -70,23 +74,13 @@ export default function AddProduct({ id, open, onClose }) {
             localStorage.setItem(`list_${id}`, JSON.stringify(currentList));
     }, [currentList]);
 
-    let text = `Стол ${id}`;
-    if (id === 13) {
-        text = "Pool";
-    }
-    if (id === 10) {
-        text = "Тен 3";
-    }
-    if (id === 11) {
-        text = "Тен 4";
-    }
-    if (id === 12) {
-        text = "Стол 10";
-    }
+    let text = getTableName(id);
 
     const allAmount = () => {
         let amount = currentList.map((item) => item.amount * item.price);
+        
         amount = amount.reduce((acc, cur) => acc + cur, 0);
+        amount = +amount + (+byTime)
         return <span className="font-bold">{amount + " руб."}</span>;
     };
 
@@ -137,7 +131,7 @@ export default function AddProduct({ id, open, onClose }) {
         top: "50%",
         left: "50%",
         transform: "translate(-50%, -50%)",
-        width: 400,
+        width: 700,
         bgcolor: "background.paper",
         border: "2px solid #000",
         boxShadow: 24,
@@ -148,7 +142,14 @@ export default function AddProduct({ id, open, onClose }) {
 
     const clearItems = () => {
         localStorage.removeItem(`list_${id}`);
+        localStorage.removeItem(`${id}_time`)
+        localStorage.removeItem(`${id}_time_value`);
+        localStorage.removeItem(`proccessable_${id}`);
+        localStorage.removeItem(`${id}_startTime`);
+        localStorage.removeItem(`${id}_moneyTime`)
+        localStorage.removeItem(`${id}_moneyTime_value`)
         setCurrentList([]);
+        handleClose();
     };
 
     const handleDone = () => {
@@ -196,6 +197,125 @@ export default function AddProduct({ id, open, onClose }) {
         handleClose();
     };
 
+    const SetTimer = () => {
+        const [hours, setHours] = useState();
+        const [min, setMin] = useState();
+        const [sec, setSec] = useState();
+
+        let countDownDate;
+        if(localStorage.getItem(`${id}_time`)) {
+            countDownDate = JSON.parse(localStorage.getItem(`${id}_time`));
+            countDownDate = new Date(countDownDate).getTime();
+            
+        } else {
+            countDownDate = new Date(new Date().getTime() + inputValue * 60000).getTime();
+            localStorage.setItem(`${id}_time`, JSON.stringify(countDownDate));
+            localStorage.setItem(`${id}_time_value`, inputValue);
+        }
+        setByTime((400 / 60) * (+localStorage.getItem(`${id}_time_value`)))
+        
+        const a = setInterval(() => {
+            const now = new Date().getTime();
+
+            const distance = countDownDate - now;
+            
+            setByTime((400 / 60) * +localStorage.getItem(`${id}_time_value`));
+            
+
+            setHours(Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
+            setMin(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)));
+            setSec(Math.floor((distance % (1000 * 60)) / 1000));
+            
+            if(distance < 0) {
+                clearInterval(a)
+                setByTime((400 / 60) * +localStorage.getItem(`${id}_time_value`));
+            }
+        }, 1000);
+        return (
+            <>
+                {hours}:{min}:{sec}
+            </>
+        )
+    };
+
+    const SetFact = () => {
+        const [hours, setHours] = useState();
+        const [min, setMin] = useState();
+        const [sec, setSec] = useState();
+
+        let dateStart;
+        if(localStorage.getItem(`${id}_startTime`)) {
+            dateStart = localStorage.getItem(`${id}_startTime`)
+        } else {
+            localStorage.setItem(`${id}_startTime`, new Date());
+        }
+
+        const a = setInterval(() => {
+            
+            const date1 = moment(new Date());
+            const date2 = moment(dateStart);
+            const duration = moment.duration(date1.diff(date2))
+            
+            setHours(duration.hours());
+            setMin(duration.minutes());
+            setSec(duration.seconds());
+            
+            
+        }, 1000);
+        if(min) {
+            setByTime(parseFloat((400 / 60) * min).toFixed())
+        }
+        if(stopTime) {
+            clearInterval(a);
+        }
+
+        return (
+            <>
+            {hours} час: {min} мин: {sec} сек <br />
+            <Button onClick={() => setStopTime(true)}>СТОП</Button>
+            </>
+        )
+    }
+
+    const SetMoney = () => {
+        const [hours, setHours] = useState();
+        const [min, setMin] = useState();
+        const [sec, setSec] = useState();
+
+        let countDownDate;
+        if(localStorage.getItem(`${id}_moneyTime`)) {
+            countDownDate = JSON.parse(localStorage.getItem(`${id}_moneyTime`));
+            countDownDate = new Date(countDownDate).getTime();
+            
+        } else {
+            const amountOfMin = parseFloat((inputValue / (400 / 60)).toFixed());
+            console.log(amountOfMin)
+            countDownDate = new Date(new Date().getTime() + amountOfMin * 60000).getTime();
+            localStorage.setItem(`${id}_moneyTime`, JSON.stringify(countDownDate));
+            localStorage.setItem(`${id}_moneyTime_value`, inputValue);
+        }
+        setByTime(localStorage.getItem(`${id}_moneyTime_value`))
+        
+        const a = setInterval(() => {
+            const now = new Date().getTime();
+
+            const distance = countDownDate - now;
+
+            setHours(Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
+            setMin(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)));
+            setSec(Math.floor((distance % (1000 * 60)) / 1000));
+            
+            if(distance < 0) {
+                clearInterval(a)
+            }
+        }, 1000);
+        return (
+            <>
+                {hours}:{min}:{sec}
+            </>
+        )
+    }
+
     return (
         <>
             <Drawer
@@ -204,8 +324,13 @@ export default function AddProduct({ id, open, onClose }) {
                 open={open}
                 onClose={handleClose}
             >
-                <Typography align="center" fontSize="32px">
-                    {text}
+                
+                <Typography align="center" fontSize="45px">
+                    {text} <br />
+                    {localStorage.getItem(`${id}_time`) || type === 'time' ? <SetTimer /> : ''} 
+                    
+                    {localStorage.getItem(`${id}_startTime`) || type === 'fact' ? <SetFact /> : ''}
+                    {localStorage.getItem(`${id}_moneyTime`) || type === 'money' ? <SetMoney /> : ''} 
                 </Typography>
                 <Divider />
                 <List>
@@ -215,8 +340,9 @@ export default function AddProduct({ id, open, onClose }) {
                                 <Badge
                                     badgeContent={item.amount}
                                     color="secondary"
+                                    className="!text-[45px]"
                                 >
-                                    <Typography fontSize="24px">
+                                    <Typography fontSize="44px">
                                         {item.name}
                                     </Typography>
                                 </Badge>
@@ -249,7 +375,7 @@ export default function AddProduct({ id, open, onClose }) {
                     ))}
                 </List>
                 <div className="flex flex-col gap-2 px-4 pt-12">
-                    <Typography fontSize={"24px"} textAlign={"center"}>
+                    <Typography fontSize={"44px"} textAlign={"center"}>
                         Добавить
                     </Typography>
                     {products.map((item) => (
@@ -266,7 +392,7 @@ export default function AddProduct({ id, open, onClose }) {
                     ))}
                 </div>
                 <Typography
-                    fontSize={"24px"}
+                    fontSize={"45px"}
                     className="pt-12 px-4"
                     textAlign={"left"}
                 >
@@ -290,7 +416,7 @@ export default function AddProduct({ id, open, onClose }) {
             <Modal
                 children={
                     <Box
-                        sx={{ ...style, width: 300, height: 200 }}
+                        sx={{ ...style, width: 700, height: 400 }}
                         className=""
                     >
                         <span
@@ -299,7 +425,7 @@ export default function AddProduct({ id, open, onClose }) {
                         >
                             ✕
                         </span>
-                        <Typography align="center" fontSize={"20px"}>
+                        <Typography align="center" fontSize={"45px"}>
                             Введите Количество
                         </Typography>
                         <div className="h-full flex flex-col gap-3 justify-center items-center">
@@ -308,11 +434,13 @@ export default function AddProduct({ id, open, onClose }) {
                                     setAmount(e.target.value);
                                 }}
                                 label="Количество"
+                                className="!text-[45px] p-[20]"
                                 type="number"
+                                sx={{fontSize: '45px'}}
                             />
                             <Button
                                 className="!min-w-[100px] !max-w-[150px]"
-                                fontSize="15px"
+                                fontSize="45px"
                                 onClick={() => {
                                     addItem();
                                     setOpenModal(false);

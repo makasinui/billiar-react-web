@@ -20,6 +20,9 @@ export default function Main() {
                     статистика
                 </Button>
             </Link>
+            <Button onClick={() => localStorage.removeItem('stat')} className="!min-w-[400px]">
+                Очистить
+            </Button>
         </div>
     );
 }

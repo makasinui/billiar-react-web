@@ -60,33 +60,33 @@ export default function Products() {
         {
             field: "name",
             headerName: "Товар",
-            minWidth: 600,
+            minWidth: 900,
             editable: true,
-            cellClassName: "font-bold",
-            headerClassName: "text-[45px]",
+            cellClassName: "font-bold text-[56px]",
+            headerClassName: "text-[65px]",
             hideable: true,
         },
         {
             field: "price",
-            headerName: "Стоимость",
+            headerName: "Цена",
             width: 280,
-            cellClassName: "bg-green-500",
-            headerClassName: "text-[45px]",
+            cellClassName: "bg-green-500 text-[55px]",
+            headerClassName: "text-[65px]",
             editable: true,
             renderCell: ({ value }) => <>{value} р.</>,
         },
         {
             field: "amount",
-            headerName: "Количество",
+            headerName: "Кол-во",
             width: 280,
-            cellClassName: "bg-green-400",
-            headerClassName: "text-[45px]",
+            cellClassName: "bg-green-400 text-[55px]",
+            headerClassName: "text-[65px]",
             editable: true,
         },
         {
             field: "actions",
             type: "actions",
-            headerName: "Действия",
+            headerName: "",
             minWidth: 250,
             headerClassName: "text-[45px]",
             cellClassName: "actions",
@@ -94,7 +94,7 @@ export default function Products() {
                 return [
                     <GridActionsCellItem
                         icon={
-                            <Button className="!text-[30px]" color="error">
+                            <Button className="!text-[50px]" color="error">
                                 Удалить
                             </Button>
                         }

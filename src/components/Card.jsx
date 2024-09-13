@@ -4,16 +4,18 @@ export default function Card({
     name,
     width,
     height,
-    onClick
+    onClick,
+    className,
+    textClassName
 }) {
     return (
         <Crd
             onClick={onClick}
-            sx={{ minWidth: width, minHeight: height, maxWidth: width }}
-            className="!bg-blue-200 cursor-pointer flex items-center justify-center"
+            sx={{ minWidth: 100, minHeight: 240 }}
+            className={`!bg-green-700 !text-white cursor-pointer flex items-center justify-center ${className}`}
         >
             <CardContent className="h-full flex justify-center items-center">
-                <Typography sx={{ fontSize: 20 }}>{name}</Typography>
+                <Typography sx={{ fontSize: 60 }} className={textClassName}>{name}</Typography>
             </CardContent>
         </Crd>
     );

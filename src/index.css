@@ -102,3 +102,19 @@ legend {
 	border: 1px solid black;
 	padding: 10px;
 }
+.muiDataGrid-editInputCell input {
+	font-size: 50px !important;
+  }
+.MuiDataGrid-editInputCell input {
+	font-size: 45px !important;
+}
+.MuiFormControlLabel-label {
+	font-size: 45px !important;
+}
+.MuiChip-filled {
+	font-size: 45px !important;
+	padding: 30px !important
+}
+.MuiInputBase-input {
+	font-size: 45px !important;
+}

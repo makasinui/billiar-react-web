@@ -44,3 +44,6 @@
 .react-datepicker__input-container {
   border: 1px solid black !important;
 }
+.muiDataGrid-editInputCell input {
+  font-size: 50px !important;
+}
