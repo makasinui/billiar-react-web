@@ -41,7 +41,7 @@ export default function Products() {
         return (
             <GridToolbarContainer>
                 <Button
-                    className="!text-[15px] !min-w-[10px]"
+                    className="!text-[45px] !min-w-[10px]"
                     startIcon={<AddIcon />}
                     onClick={handleClick}
                     color="primary"

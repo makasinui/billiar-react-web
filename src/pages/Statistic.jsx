@@ -305,20 +305,20 @@ export default function Statistic() {
                             locale={ru}
                         />
                     </div>
-                    <div className="flex gap-3 justify-between px-12 py-4 bg-blue-300 min-h-[500px]">
-                        <div className="flex flex-col">
+                    <div className="flex flex-col gap-3 justify-between px-12 py-4 bg-blue-300 min-h-[500px]">
+                        <div className="flex flex-col min-h-[500px]">
                             <Typography
                                 className="text-center"
-                                fontSize={"25px"}
+                                fontSize={"45px"}
                             >
                                 Статистика по товарам
                             </Typography>
                             <StatisticTable rows={getRowStats(true)} product />
                         </div>
-                        <div className="flex flex-col ">
+                        <div className="flex flex-col min-h-[500px]">
                             <Typography
                                 className="text-center"
-                                fontSize={"25px"}
+                                fontSize={"45px"}
                             >
                                 Статистика по столам
                             </Typography>

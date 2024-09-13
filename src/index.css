@@ -118,3 +118,7 @@ legend {
 .MuiInputBase-input {
 	font-size: 45px !important;
 }
+.MuiTab-fullWidth {
+	font-size: 45px !important;
+	padding: 15px 30px !important;
+}

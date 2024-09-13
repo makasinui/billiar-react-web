@@ -5,24 +5,24 @@ export default function StatisticTable({ rows, product }) {
         {
             field: "name",
             headerName: "Товар",
-            minWidth: 200,
-            cellClassName: "font-bold",
-            headerClassName: "text-[20px]",
+            minWidth: 600,
+            cellClassName: "font-bold text-[45px]",
+            headerClassName: "text-[20px] text-[45px]",
         },
         {
             field: "amount",
             headerName: "Куплено",
-            width: 200,
-            cellClassName: "bg-green-500",
-            headerClassName: "text-[20px]",
+            width: 500,
+            cellClassName: "bg-green-500 text-[45px]",
+            headerClassName: "text-[20px] text-[45px]",
             renderCell: ({ value }) => <>{value}</>,
         },
         {
             field: "total",
             headerName: "Выручка",
-            width: 100,
-            cellClassName: "bg-green-500",
-            headerClassName: "text-[20px]",
+            width: 540,
+            cellClassName: "bg-green-500 text-[45px]",
+            headerClassName: "text-[20px] text-[45px]",
             renderCell: ({ value, row }) => {
                 return <>{value} р.</>
             }
@@ -33,16 +33,16 @@ export default function StatisticTable({ rows, product }) {
         {
             field: "table",
             headerName: "Стол",
-            minWidth: 200,
-            cellClassName: "font-bold",
-            headerClassName: "text-[20px]",
+            minWidth: 600,
+            cellClassName: "font-bold text-[45px]",
+            headerClassName: "text-[20px] text-[45px]",
         },
         {
             field: "price",
             headerName: "Выручка",
-            minWidth: 200,
-            cellClassName: "bg-green-500",
-            headerClassName: "text-[20px]",
+            minWidth: 800,
+            cellClassName: "bg-green-500 text-[45px]",
+            headerClassName: "text-[20px] text-[45px]",
             editable: true,
             renderCell: ({ value }) => <>{value} р.</>,
         }
